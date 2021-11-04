@@ -19,12 +19,32 @@ public class User {
    @Column(name = "email")
    private String email;
 
-   public User() {}
+   @OneToOne(cascade=CascadeType.ALL)
+   @JoinColumn(name = "car_id")
+   private Car car;
+
+   public Car getCar() {
+      return this.car;
+   }
+
+   public void setCar(Car car) {
+      this.car = car;
+   }
+
+   public User(){}
+
    
    public User(String firstName, String lastName, String email) {
       this.firstName = firstName;
       this.lastName = lastName;
       this.email = email;
+   }
+
+   public User(String firstName, String lastName, String email, Car car) {
+      this.firstName = firstName;
+      this.lastName = lastName;
+      this.email = email;
+      this.car = car;
    }
 
    public Long getId() {
@@ -57,5 +77,39 @@ public class User {
 
    public void setEmail(String email) {
       this.email = email;
+   }
+
+   @Override
+   public String toString() {
+      return "User{" +
+              "firstName='" + firstName + '\'' +
+              ", lastName='" + lastName + '\'' +
+              ", email='" + email + '\'' +
+              ", car=" + car +
+              '}';
+   }
+
+   @Override
+   public boolean equals(Object o) {
+      if (this == o) return true;
+      if (!(o instanceof User)) return false;
+
+      User user = (User) o;
+
+      if (!id.equals(user.id)) return false;
+      if (firstName != null ? !firstName.equals(user.firstName) : user.firstName != null) return false;
+      if (lastName != null ? !lastName.equals(user.lastName) : user.lastName != null) return false;
+      if (email != null ? !email.equals(user.email) : user.email != null) return false;
+      return car != null ? car.equals(user.car) : user.car == null;
+   }
+
+   @Override
+   public int hashCode() {
+      int result = id.hashCode();
+      result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
+      result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
+      result = 31 * result + (email != null ? email.hashCode() : 0);
+      result = 31 * result + (car != null ? car.hashCode() : 0);
+      return result;
    }
 }
